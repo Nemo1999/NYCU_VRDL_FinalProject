@@ -134,3 +134,5 @@ data/stage_2_train_images
 data/*.txt
 data/*.json
 data/*.csv
+
+data/*

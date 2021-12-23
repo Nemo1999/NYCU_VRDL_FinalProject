@@ -4,5 +4,6 @@ install:
 	pip install -r requirements.txt
 
 download_dataset:
+	rm -rf data/*
 	gdown https://drive.google.com/uc?id=1ZcyAMUDBs67KU9hc4sW2DaHOVxHEPFFp -O "data/dataset.zip"
-	unzip "data/dataset.zip" -d "data"
+	unzip -q "data/dataset.zip"  -d "data" 
