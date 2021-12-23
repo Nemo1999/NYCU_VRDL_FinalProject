@@ -2,3 +2,4 @@ pydicom
 matplotlib
 opencv-python
 pandas
+gdown
