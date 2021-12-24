@@ -2,6 +2,8 @@
 
 install: 
 	pip install -r requirements.txt
+	# sampling-free dependency 
+	pip install ninja yacs cython matplotlib tqdm opencv-python pillow pycocotools
 
 download_dataset:
 	rm -rf data/*
