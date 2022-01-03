@@ -84,7 +84,7 @@ if __name__ == "__main__":
     train_files = allFileList[int(len(allFileList) * 0.05):]
 
     coco_format_train = get_coco_json_format()
-    coco_format_train["categories"] = create_category_annotation(category_`ids)
+    coco_format_train["categories"] = create_category_annotation(category_ids)
     coco_format_train["images"] = []
     coco_format_train["annotations"] = []
     
@@ -93,7 +93,8 @@ if __name__ == "__main__":
     coco_format_test["images"] = []
     coco_format_test["annotations"] = []
     
-    for files, coco_format, file_name in zip([train_files, test_files], [coco_format_train, coco_format_test], ['neumonia_train', 'neumonia_test']):
+    for files, coco_format, file_name in zip([train_files, test_files], [coco_format_train, coco_format_test], ['neumonia_train', 'neumonia_val']):
+        image_id = 1
         print(f"generating {file_name}.json...")
         for file in tqdm(files):
             img_info = create_image_annotation(
