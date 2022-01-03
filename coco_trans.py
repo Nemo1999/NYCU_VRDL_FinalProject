@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 import os
 from tqdm import tqdm
@@ -74,28 +75,39 @@ if __name__ == "__main__":
     data = pd.read_csv(r'./data/stage_2_train_labels.csv')
     print("preparing train.json")
     image_id = 1
-    coco_format = get_coco_json_format()
-    coco_format["categories"] = create_category_annotation(category_ids)
-    coco_format["images"] = []
-    coco_format["annotations"] = []
     w = 1024
     h = 1024
     category_id = 1
 
-    for file in tqdm(allFileList):
-        img_info = create_image_annotation(
-            file, w, h, image_id)
-        coco_format["images"].append(img_info)
+    np.random.shuffle(allFileList)
+    test_files = allFileList[:int(len(allFileList) * 0.05)]
+    train_files = allFileList[int(len(allFileList) * 0.05):]
 
-        img_name = file[:-4]
-        data_info = data[data['patientId'] == img_name]
-        coco_format["annotations"] = images_annotations_info(
-            image_id, coco_format["annotations"], data_info)
-        image_id += 1
+    coco_format_train = get_coco_json_format()
+    coco_format_train["categories"] = create_category_annotation(category_`ids)
+    coco_format_train["images"] = []
+    coco_format_train["annotations"] = []
+    
+    coco_format_test = get_coco_json_format()
+    coco_format_test["categories"] = create_category_annotation(category_ids)
+    coco_format_test["images"] = []
+    coco_format_test["annotations"] = []
+    
+    for files, coco_format, file_name in zip([train_files, test_files], [coco_format_train, coco_format_test], ['neumonia_train', 'neumonia_test']):
+        print(f"generating {file_name}.json...")
+        for file in tqdm(files):
+            img_info = create_image_annotation(
+                file, w, h, image_id)
+            coco_format["images"].append(img_info)
+            img_name = file[:-4]
+            data_info = data[data['patientId'] == img_name]
+            coco_format["annotations"] = images_annotations_info(
+                image_id, coco_format["annotations"], data_info)
+            image_id += 1
 
-    with open("./data/{}.json".format("train"), "w") as outfile:
-        json.dump(coco_format, outfile, indent=4)
-        print("finish!!")
+        with open("./data/{}.json".format(file_name), "w") as outfile:
+            json.dump(coco_format, outfile, indent=4)
+            print("finish!!")
 
     '''# validation data
     print("preparing val.json")
